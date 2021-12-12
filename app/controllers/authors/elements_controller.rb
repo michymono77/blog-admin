@@ -1,39 +1,19 @@
 module Authors
 
   class ElementsController < AuthorsController
+    before_action :set_post
     before_action :set_element, only: %i[ show edit update destroy ]
-
-    # GET /elements or /elements.json
-    def index
-      @elements = Element.all
-    end
-
-    # GET /elements/1 or /elements/1.json
-    def show
-    end
-
-    # GET /elements/new
-    def new
-      @element = Element.new
-    end
-
-    # GET /elements/1/edit
-    def edit
-    end
 
     # POST /elements or /elements.json
     def create
-      @element = Element.new(element_params)
+      @element = @post.elements.build
 
-      respond_to do |format|
-        if @element.save
-          format.html { redirect_to @element, notice: "Element was successfully created." }
-          format.json { render :show, status: :created, location: @element }
-        else
-          format.html { render :new, status: :unprocessable_entity }
-          format.json { render json: @element.errors, status: :unprocessable_entity }
-        end
+      if @element.save
+        notice = nil
+      else
+        notice = @element.errors.full_messages.join(". ")<< "."
       end
+      redirect_to edit_post_path(@post), notice: notice
     end
 
     # PATCH/PUT /elements/1 or /elements/1.json
@@ -60,13 +40,17 @@ module Authors
 
     private
       # Use callbacks to share common setup or constraints between actions.
+      def set_post
+        @post = current_author.posts.find(params[:post_id])
+      end
+
       def set_element
-        @element = Element.find(params[:id])
+        @element = @post.elements.find(params[:id])
       end
 
       # Only allow a list of trusted parameters through.
       def element_params
-        params.require(:element).permit(:element_type, :content, :post_id, :position)
+        params.require(:element).permit(:element_type, :content)
       end
   end
 end
