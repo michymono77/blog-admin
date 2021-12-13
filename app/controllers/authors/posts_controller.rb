@@ -19,7 +19,9 @@ class PostsController < AuthorsController
 
   # GET /posts/1/edit
   def edit
-    @paragraph = @post.elements.build(element_type: 'paragraph')
+    # @paragraph = @post.elements.build(element_type: 'paragraph')
+    # @image = @post.elements.build(element_type: 'image')
+    @element = @post.elements.build
   end
 
   # POST /posts or /posts.json

@@ -10,36 +10,67 @@
   </div>
   <div class="col-md-9">
     <div class="mb-3">
-      <%= form_with(model: [@post, @paragraph]) do |form| %>
-        <%= form.hidden_field :element_type, value: 'paragraph' %>
-        <%= form.submit "paragraph", class:"btn btn-primary" %>
-      <% end %>
-    </div>
-    <div class="card">
-      <div class="card-body pt-5">
-        <% @post.elements.each do |element| %>
-          <% if element.persisted? %>
-            <div class="mb-3 p-3 paragraph">
-              <div class="paragraph-content mb-3">
-                <%if element.content.present? %>
-                <%= element.content%>
-                <% else %>
-                <p>Click to add content.</p>
-                <% end %>
-              </div>
-              <div class="paragraph-form d-none">
-                <%= form_with(model: [@post, element]) do |form| %>
-                  <%= form.rich_text_area :content%>
-                  <div class="mb-3 mt-3">
-                    <%= form.submit "save", class:"btn btn-primary" %>
-                    <a href="#" class="cancel btn btn-secondary">Cancel</a>
+      <%#= form_with(model: [@post, @paragraph]) do |form| %>
+        <%#= form.hidden_field :element_type, value: 'paragraph' %>
+        <%#= form.submit "paragraph", class:"btn btn-primary" %>
+        <%# end %>
+        <%#= form_with(model: [@post, @image]) do |form| %>
+          <%#= form.hidden_field :element_type, value: 'image' %>
+          <%#= form.submit "Image", class:"btn btn-primary" %>
+          <%# end %>
+          <div style="display:inline-block;"><%= form_with(model: [@post, @element]) do |form| %>
+              <%= form.hidden_field :element_type, value: 'paragraph' %>
+              <%= form.submit "Paragraph", class:"btn btn-dark" %>
+            <% end %></div>
+          <div style="display:inline-block;"><%= form_with(model: [@post, @element]) do |form| %>
+              <%= form.hidden_field :element_type, value: 'image' %>
+              <%= form.submit "Image", class:"btn btn-dark" %>
+            <% end %></div>
+        </div>
+        <div class="card">
+          <div class="card-body pt-5">
+            <% @post.elements.each do |element| %>
+              <% if element.persisted? %>
+                <% if element.paragraph? %>
+                  <div class="mb-3 p-3 paragraph">
+                    <div class="paragraph-content mb-3">
+                      <%if element.content.present? %>
+                        <%= element.content%>
+                      <% else %>
+                        <p>Click to add content.</p>
+                      <% end %>
+                    </div>
+                    <div class="paragraph-form d-none">
+                      <%= form_with(model: [@post, element]) do |form| %>
+                        <%= form.rich_text_area :content%>
+                        <div class="mb-3 mt-3 d-flex justify-content-between">
+                          <div>
+                            <%= form.submit "save", class:"btn btn-primary" %>
+                            <a href="#" class="cancel btn btn-secondary">Cancel</a>
+                          </div>
+                          <%= link_to 'Delete',post_element_path(@post,element), method: :delete, class:'btn btn-danger', data: { confirm: "Are you sure? "}%>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                <% elsif element.image? %>
+                  <div class="image mb-4 p-3">
+                    <% if element.image.present? %>
+                      <div style="text-align:center;"><%= image_tag(element.image, width: "30%", height: "30%")%></div>
+                    <% else %>
+                      <%= form_with(model: [@post, element]) do |form| %>
+                        <%= form.file_field :image%>
+                        <div class="mb-3 mt-3">
+                          <%= form.submit "save", class:"btn btn-primary" %>
+                          <a href="#" class="cancel btn btn-secondary">Cancel</a>
+                        </div>
+                      <% end %>
+                    <% end %>
                   </div>
                 <% end %>
-              </div>
-            </div>
-          <% end %>
-        <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
