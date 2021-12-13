@@ -1,6 +1,6 @@
-<%= link_to 'Back', posts_path, class: 'btn btn-secondary mb-3' %>
 <div class="row">
   <div class="col-md-3">
+    <%= link_to 'Back', posts_path, class: 'btn btn-secondary mb-3' %>
     <div class="card">
       <div class="card-body">
         <h4 class="card-title"> Editing Post</h4>
@@ -9,8 +9,37 @@
     </div>
   </div>
   <div class="col-md-9">
-  <%= form_with(model: [@post, @paragraph]) do |form| %>
-  <%= form.submit class:"btn btn-secondary" %>
-  <% end %>
+    <div class="mb-3">
+      <%= form_with(model: [@post, @paragraph]) do |form| %>
+        <%= form.hidden_field :element_type, value: 'paragraph' %>
+        <%= form.submit "paragraph", class:"btn btn-primary" %>
+      <% end %>
+    </div>
+    <div class="card">
+      <div class="card-body pt-5">
+        <% @post.elements.each do |element| %>
+          <% if element.persisted? %>
+            <div class="mb-3 p-3">
+              <div class="paragraph-content mb-3">
+                <%if element.content.present? %>
+                <%= element.content%>
+                <% else %>
+                <p>Click to add content.</p>
+                <% end %>
+              </div>
+              <div class="paragraph-form d-none">
+                <%= form_with(model: [@post, element]) do |form| %>
+                  <%= form.rich_text_area :content%>
+                  <div class="mb-3 mt-3">
+                    <%= form.submit "save", class:"btn btn-primary" %>
+                    <a href="#" class="cancel btn btn-secondary">Cancel</a>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>

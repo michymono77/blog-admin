@@ -6,7 +6,7 @@ module Authors
 
     # POST /elements or /elements.json
     def create
-      @element = @post.elements.build
+      @element = @post.elements.build(element_params)
 
       if @element.save
         notice = nil
@@ -18,15 +18,8 @@ module Authors
 
     # PATCH/PUT /elements/1 or /elements/1.json
     def update
-      respond_to do |format|
-        if @element.update(element_params)
-          format.html { redirect_to @element, notice: "Element was successfully updated." }
-          format.json { render :show, status: :ok, location: @element }
-        else
-          format.html { render :edit, status: :unprocessable_entity }
-          format.json { render json: @element.errors, status: :unprocessable_entity }
-        end
-      end
+      @element.update(element_params)
+      redirect_to edit_post_path(@element.post)
     end
 
     # DELETE /elements/1 or /elements/1.json
