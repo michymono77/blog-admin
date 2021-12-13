@@ -56,7 +56,9 @@
                 <% elsif element.image? %>
                   <div class="image mb-4 p-3">
                     <% if element.image.present? %>
-                      <div style="text-align:center;"><%= image_tag(element.image, width: "30%", height: "30%")%></div>
+                      <div style="text-align:center;"><%= image_tag(element.image, width: "30%", height: "30%")%>
+                      </div>
+                      <%= link_to 'Delete',post_element_path(@post,element), method: :delete, class:'btn btn-danger mt-2',style:"float: right;", data: { confirm: "Are you sure? "}%>
                     <% else %>
                       <%= form_with(model: [@post, element]) do |form| %>
                         <%= form.file_field :image%>
