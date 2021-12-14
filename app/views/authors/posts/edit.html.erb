@@ -9,19 +9,19 @@
         <%= render 'form', post: @post %>
       </div>
       <div class="card-footer">
-        <!--
-        <%# if @post.published? %>
+<!--
+        <% if @post.published? %>
           <a href="#"
        class="btn btn-secondary w-100"
        data-reflex='click->PublisherReflex#unpublish'
-            data-post-id='<%#= @post.id %>'>Unpublish</a>
-        <%# else %>
+            data-post-id='<%= @post.id %>'>Unpublish</a>
+        <% else %>
           <a href="#"
        class="btn btn-dark w-100"
        data-reflex='click->PublisherReflex#publish'
-            data-post-id='<%#= @post.id %>'>Publish</a>
-        <%# end %>
-         -->
+            data-post-id='<%= @post.id %>'>Publish</a>
+        <% end %>
+-->
       </div>
     </div>
   </div>
@@ -60,11 +60,19 @@
               <p>Unpublished</p>
             <% end %>
           </div>
-          <div class="card-body pt-5 mr-1">
-            <ul id='elements' style="list-style:none;padding-left:0px">
-              <% @post.elements.each do |element| %>
+          <%# <div data-controller="hello">
+  <input data-hello-target="name" type="text">
+  <button data-action="click->hello#greet">
+    Greet
+  </button>
+  <span data-hello-target="output">
+  </span>
+</div> %>
+          <div class="card-body pt-5 mr-1" data-controller="elements">
+            <ul id='elements' style="list-style:none;padding-left:0px" data-action="drop->elements#sort">
+              <% @post.elements.order(position: :asc).each do |element| %>
                 <% if element.persisted? %>
-                  <li>
+                  <li data-id="<%= element.id %>" class="element-item">
                     <% if element.paragraph? %>
                       <div class="mb-3 p-3 paragraph">
                         <div class="paragraph-content mb-3">

@@ -17,7 +17,7 @@ export default class extends ApplicationController {
   */
 
   connect () {
-    super.connect()
+   true;
     // add your code here, if applicable
   }
 
